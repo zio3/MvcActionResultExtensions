@@ -12,28 +12,34 @@ namespace System.Web.Mvc
     {
         static public ContentResult JsonNet(this Controller src, Object obj)
         {
-
-            var jsonSerializerSettings = new JsonSerializerSettings
-            {
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects
-            };
-            var results = JsonConvert.SerializeObject(obj,jsonSerializerSettings);
+            var results = JsonConvert.SerializeObject(obj);
             return new ContentResult
             {
                 Content = results,
                 ContentType = "application/json"
             };
         }
-        static public ContentResult JsonNetError(this Controller src, Object obj, int statucCode)
+
+        static public ContentResult JsonNet(this Controller src, Object obj,PreserveReferencesHandling prh)
         {
+
             var jsonSerializerSettings = new JsonSerializerSettings
             {
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                PreserveReferencesHandling = prh
             };
+            var results = JsonConvert.SerializeObject(obj, jsonSerializerSettings);
+            return new ContentResult
+            {
+                Content = results,
+                ContentType = "application/json"
+            };
+        }
 
+        static public ContentResult JsonNetError(this Controller src, Object obj, int statucCode)
+        {
             src.HttpContext.Response.StatusCode = statucCode;
             src.HttpContext.Response.TrySkipIisCustomErrors = true;
-            var results = JsonConvert.SerializeObject(obj, jsonSerializerSettings);
+            var results = JsonConvert.SerializeObject(obj);
             return new ContentResult
             {
                 Content = results,
