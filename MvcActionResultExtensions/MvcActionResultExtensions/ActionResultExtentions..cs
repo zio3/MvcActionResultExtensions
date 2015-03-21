@@ -13,7 +13,11 @@ namespace System.Web.Mvc
         static public ContentResult JsonNet(this Controller src, Object obj)
         {
 
-            var results = JsonConvert.SerializeObject(obj);
+            var jsonSerializerSettings = new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects
+            };
+            var results = JsonConvert.SerializeObject(obj,jsonSerializerSettings);
             return new ContentResult
             {
                 Content = results,
@@ -22,9 +26,14 @@ namespace System.Web.Mvc
         }
         static public ContentResult JsonNetError(this Controller src, Object obj, int statucCode)
         {
+            var jsonSerializerSettings = new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects
+            };
+
             src.HttpContext.Response.StatusCode = statucCode;
             src.HttpContext.Response.TrySkipIisCustomErrors = true;
-            var results = JsonConvert.SerializeObject(obj);
+            var results = JsonConvert.SerializeObject(obj, jsonSerializerSettings);
             return new ContentResult
             {
                 Content = results,
