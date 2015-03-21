@@ -20,14 +20,9 @@ namespace System.Web.Mvc
             };
         }
 
-        static public ContentResult JsonNet(this Controller src, Object obj,PreserveReferencesHandling prh)
+        static public ContentResult JsonNet(this Controller src, Object obj, JsonSerializerSettings jss)
         {
-
-            var jsonSerializerSettings = new JsonSerializerSettings
-            {
-                PreserveReferencesHandling = prh
-            };
-            var results = JsonConvert.SerializeObject(obj, jsonSerializerSettings);
+            var results = JsonConvert.SerializeObject(obj, jss);
             return new ContentResult
             {
                 Content = results,
